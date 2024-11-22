@@ -38,10 +38,7 @@ class DBSettings(Base):
 
     @property
     def DATABASE_URL(self):
-        if MODE == Mode.prod:
-            return f'postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}'
-        elif MODE == Mode.dev:
-            return "sqlite+aiosqlite:///./athkeeper.db"
+        return f'postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}'
 
 
 class AuthJWT(Base):
