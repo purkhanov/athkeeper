@@ -18,3 +18,4 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         yield db
     finally:
         await db.close()
+        
