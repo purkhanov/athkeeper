@@ -35,3 +35,7 @@ class SiginUpSchema(BaseModel):
     last_name: NAME
     password: HASHPASS
 
+
+class TokenResponseSchema(BaseModel):
+    access_token: str
+    token_type: str
