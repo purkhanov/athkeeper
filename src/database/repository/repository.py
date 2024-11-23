@@ -45,7 +45,7 @@ class SQLAlchemyRepository(AbstractRepository):
     
 
     async def find_one(self, pk: int):
-        stmt = select(self.model).where(self.model == pk)
+        stmt = select(self.model).where(self.model.id == pk)
         res: Result = await self.session.execute(stmt)
         return res.scalar_one_or_none()
     

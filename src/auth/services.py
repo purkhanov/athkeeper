@@ -56,6 +56,8 @@ async def create_token(email: str, password: str, db_session: AsyncSession):
 
     payload = {
         "id": user.id,
+        "is_staff": user.is_staff,
+        "is_superuser": user.is_superuser,
         "exp": expires
     }
 

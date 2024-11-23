@@ -26,7 +26,6 @@ class User(Base):
     is_superuser: Mapped[bool] = mapped_column(default = False)
     for_free: Mapped[bool] = mapped_column(default = False)
     ban: Mapped[bool] = mapped_column(default = False)
-    deleted: Mapped[bool] = mapped_column(default = False)
 
     mexc_api_key: Mapped[str | None] = mapped_column(String(100))
     mexc_secret_key: Mapped[str | None] = mapped_column(String(150))
