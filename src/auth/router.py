@@ -9,7 +9,7 @@ from .services import create_new_user, create_token
 router = APIRouter(prefix = "/auth", tags = ["auth"])
 
 
-@router.post("/siginup", status_code = status.HTTP_201_CREATED)
+@router.post("/signup", status_code = status.HTTP_201_CREATED)
 async def siginup(user_request: SiginUpSchema, db: db_dependency):
     user = await create_new_user(user_request, db)
     return {"id": user.id}

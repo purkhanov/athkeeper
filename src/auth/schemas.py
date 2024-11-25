@@ -19,20 +19,12 @@ NAME = Annotated[
     Field(default = None, min_length = 3, max_length = 50),
 ]
 
-PHONE_NUMBER = Annotated[
-    str | None,
-    StringConstraints(strip_whitespace = True),
-    Field(default = None, min_length = 10, max_length = 20),
-]
-
 CREATED_AT = Annotated[datetime | str, AfterValidator(lambda date: date.strftime('%d-%m-%Y'))]
 
 
 class SiginUpSchema(BaseModel):
     email: EmailStr
-    phone_number: PHONE_NUMBER
     first_name: NAME
-    last_name: NAME
     password: HASHPASS
 
 

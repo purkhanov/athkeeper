@@ -15,9 +15,7 @@ class UserResSchema(BaseModel):
     id: int
     email: str
     telegram_id: int | None
-    phone_number: str | None
     first_name: str | None
-    last_name: str | None
 
     is_staff: bool
     is_superuser: bool

@@ -17,9 +17,7 @@ class User(Base):
 
     email: Mapped[str] = mapped_column(String(100), unique = True, index = True)
     telegram_id: Mapped[int | None] = mapped_column(BigInteger, index = True)
-    phone_number: Mapped[str | None] = mapped_column(String(50))
     first_name: Mapped[str | None] = mapped_column(String(50))
-    last_name: Mapped[str | None] = mapped_column(String(50))
     password: Mapped[str] = mapped_column(String(255))
 
     is_staff: Mapped[bool] = mapped_column(default = False)
