@@ -14,9 +14,9 @@ class UserService:
         self.repos = UserRepository(db_session)
 
 
-    async def get_user(self, pk: int) -> User | None:
+    async def get_user(self, telegram_id: int) -> User | None:
         try:
-            return await self.repos.find_one(pk)
+            return await self.repos.get_user_by_tg_id(telegram_id)
         except Exception as ex:
             logger.error("failed to get user", ex)
             raise

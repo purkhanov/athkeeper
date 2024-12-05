@@ -8,14 +8,14 @@ from .schemas import CreateUserSchema, UpdateUserSchema, UserResponseSchema
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix = '/users', tags = ['user'])
 
-@router.get('', status_code=status.HTTP_200_OK, response_model=UserResponseSchema)
+@router.get('', status_code=status.HTTP_200_OK, response_model=UserResponseSchema|None)
 async def get_user(user: user_dependency, db: db_dependency):
     return await UserService(db).get_user(user.telegram_id)
 
 
 @router.post('', status_code=status.HTTP_201_CREATED)
 async def create_user(user_data: CreateUserSchema, db: db_dependency):
-    return
+    await UserService(db).create_user(user_data)
 
 
 @router.patch('', status_code=status.HTTP_202_ACCEPTED)
