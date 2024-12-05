@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from enum import Enum
 
@@ -7,21 +8,28 @@ from enum import Enum
 class Mode(Enum):
     prod = 'prod'
     dev = 'dev'
-    test = 'test'
 
 
-MODE = Mode.dev
+SITE_URL = 'https://athkeeper.com'
 MEXC_BASE_URL = 'https://api.mexc.com'
-BASE_DIR = Path(__file__).resolve().parent
 
-if MODE == Mode.prod:
-    ORIGINS = ["https://athkeeper.com"]
-else:
-    ORIGINS = ['*']
+BASE_DIR = Path(__file__).resolve().parent
 
 
 class Base(BaseSettings):
+    BOT_TOKEN: str
+    MODE: Mode = Field(default = Mode.dev)
+
     model_config = SettingsConfigDict(env_file = BASE_DIR / '.env')
+
+
+class CORSSettings(Base):
+    ALLOW_METHODS: list[str] = ['GET', 'POST', 'PATCH', 'DELETE']
+    ALLOW_HEADERS: list[str] = ['*']
+
+    @property
+    def ORIGINS(self) -> list[str]:
+        return [SITE_URL] if self.MODE == Mode.prod else ['*']
 
 
 class DBSettings(Base):
@@ -31,20 +39,13 @@ class DBSettings(Base):
     DB_PASS: str
     DB_NAME: str
 
-    if MODE == Mode.dev:
-        ECHO: bool = True
-    else:
-        ECHO: bool = False
+    @property
+    def ECHO(self) -> bool:
+        return self.MODE != Mode.prod
 
     @property
     def DATABASE_URL(self):
         return f'postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}'
-
-
-class AuthJWT(Base):
-    private_key: Path = BASE_DIR.parent / 'certs' / 'jwt-private.pem'
-    public_key: Path = BASE_DIR.parent / 'certs' / 'jwt-public.pem'
-    ALGORITHM: str = 'RS256'
 
 
 def configure_logging(level = logging.INFO):
@@ -56,7 +57,7 @@ def configure_logging(level = logging.INFO):
 
 
 class Settings(Base):
-    auth_jwt: AuthJWT = AuthJWT()
+    cors: CORSSettings = CORSSettings()
     db: DBSettings = DBSettings()
 
 
