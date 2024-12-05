@@ -1,32 +1,22 @@
-from pydantic import BaseModel, EmailStr
+from typing import Annotated
+from pydantic import BaseModel, Field
+
+
+API_KEY = Annotated[str, Field(min_length=15, max_length=150)]
 
 
 class UpdateUserSchema(BaseModel):
-    email: EmailStr | None = None
-    phone_number: str | None = None
+    username: str | None = None
     first_name: str | None = None
     last_name: str | None = None
 
-    mexc_api_key: str | None = None
-    mexc_secret_key: str | None = None
+    mexc_api_key: API_KEY | None = None
+    mexc_secret_key: API_KEY | None = None
 
 
-class UserResSchema(BaseModel):
-    id: int
-    email: str
-    telegram_id: int | None
-    first_name: str | None
-
-    is_staff: bool
-    is_superuser: bool
-    for_free: bool
-    ban: bool
-
-    mexc_api_key: str | None
-    mexc_secret_key: str | None
+class CreateUserSchema(UpdateUserSchema):
+    telegram_id: int
 
 
-class CurrentUserShema(BaseModel):
-    id: int
-    is_staff: bool
-    is_superuser: bool
+class UserResponseSchema(CreateUserSchema):
+    pass

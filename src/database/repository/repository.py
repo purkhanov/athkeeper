@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from sqlalchemy import select, insert, update, delete
+from typing import Any
+from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.engine import Result
 
@@ -38,7 +39,7 @@ class SQLAlchemyRepository(AbstractRepository):
         self.session = session
 
 
-    async def find_all(self, limit, offset):
+    async def find_all(self, limit: int, offset: int):
         stmt = select(self.model).limit(limit).offset(offset)
         res: Result = await self.session.execute(stmt)
         return res.scalars().all()
@@ -50,14 +51,14 @@ class SQLAlchemyRepository(AbstractRepository):
         return res.scalar_one_or_none()
     
 
-    async def create(self, data: dict):
+    async def create(self, data: dict[str, Any]):
         new_data = self.model(**data)
         self.session.add(new_data)
         await self.session.commit()
         return new_data
     
 
-    async def update(self, pk: int, data: dict):
+    async def update(self, pk: int, data: dict[str, Any]):
         stmt = (
             update(self.model)
             .where(self.model.id == pk)
